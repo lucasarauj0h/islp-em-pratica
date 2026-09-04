@@ -19,7 +19,7 @@ O objetivo é aprender enquanto os conceitos são aplicados em laboratórios, ex
 ```mermaid
 flowchart TB
     accTitle: Mapa dos capítulos, laboratórios e projetos do repositório
-    accDescr: Os capítulos 3 a 6 do ISLP conduzem a laboratórios de regressão, classificação, reamostragem e regularização, que depois se conectam aos projetos California Housing, Breast Cancer e Ames Housing.
+    accDescr: Os capítulos 3 a 8 do ISLP conduzem a laboratórios, experimentos e projetos sobre regressão, classificação, reamostragem, regularização, modelagem não linear e métodos baseados em árvores.
 
     ISLP["ISLP: aprendizagem estatística"]
 
@@ -27,31 +27,42 @@ flowchart TB
     C4["Capítulo 4<br/>Classificação"]
     C5["Capítulo 5<br/>Reamostragem"]
     C6["Capítulo 6<br/>Seleção e regularização"]
+    C7["Capítulo 7<br/>Modelagem não linear"]
+    C8["Capítulo 8<br/>Métodos baseados em árvores"]
 
     L3["Lab: regressão linear"]
     L4["Lab: logística, LDA, QDA,<br/>Naive Bayes e KNN"]
     L5["Lab: validação cruzada<br/>e bootstrap"]
     L6["Lab: seleção de subconjuntos,<br/>ridge, lasso, PCR e PLS"]
+    L7["Lab: polinômios, splines,<br/>GAMs e regressão local"]
+    L8["Lab: árvores, poda,<br/>ensembles e BART"]
 
     P3["Projeto: regressão<br/>California Housing"]
     P4["Projeto: classificação<br/>Breast Cancer Wisconsin"]
     E6["Experimento: seleção<br/>de atributos em Ames"]
     P56["Projeto: precificação<br/>Ames Housing"]
+    P7["Projeto: probabilidade de<br/>inadimplência em cartões"]
+    P8A["Projeto: priorização de clientes<br/>Bank Marketing"]
+    P8B["Projeto: risco de crédito<br/>German Credit"]
 
-    A["Artefatos: pipeline OLS<br/>e metadados do modelo"]
+    A["Artefatos: modelos, pipelines<br/>e metadados"]
 
-    ISLP --> C3
-    ISLP --> C4
-    ISLP --> C5
-    ISLP --> C6
+    ISLP --> C3 --> C4 --> C5 --> C6 --> C7 --> C8
 
     C3 --> L3 --> P3
     C4 --> L4 --> P4
     C5 --> L5 --> P56
     C6 --> L6 --> E6
     C6 --> P56
+    C7 --> L7 --> P7
+    C8 --> L8
+    C8 --> P8A
+    C8 --> P8B
     E6 -.->|experimento complementar| P56
     P56 --> A
+    P7 --> A
+    P8A --> A
+    P8B --> A
 ```
 
 ### Como interpretar o mapa
@@ -60,7 +71,9 @@ flowchart TB
 - O **Capítulo 4** conecta modelos de classificação ao diagnóstico do conjunto Breast Cancer Wisconsin.
 - O **Capítulo 5** fornece validação cruzada e bootstrap para comparar modelos sem depender de uma única divisão dos dados.
 - O **Capítulo 6** conecta seleção de variáveis, regularização e redução de dimensão aos experimentos com Ames Housing.
-- O projeto Ames integra os capítulos 5 e 6 em um fluxo end-to-end e persiste o modelo final em `artifacts/`.
+- O **Capítulo 7** amplia a forma funcional dos modelos com polinômios, splines, GAMs e regressão local, aplicados à estimação de probabilidade de inadimplência.
+- O **Capítulo 8** conecta árvores, poda e ensembles a problemas de priorização comercial e risco de crédito.
+- Os projetos Ames, inadimplência em cartões e German Credit persistem modelos e contratos de inferência em `artifacts/`; o projeto Bank Marketing também inclui a etapa de persistência em seu fluxo executável.
 
 ## Trilha por capítulo
 
@@ -70,6 +83,8 @@ flowchart TB
 | **4 — Classificação** | <ul><li>Regressão logística</li><li>LDA e QDA</li><li>Naive Bayes e KNN</li><li>Thresholds e análise de erros</li></ul> | [Laboratório](cap04_lab_classificacao.ipynb) · [Projeto](cap04_projeto_classificacao_cancer_mama.ipynb) |
 | **5 — Reamostragem** | <ul><li>Conjunto de validação</li><li>Validação cruzada</li><li>LOOCV</li><li>Bootstrap</li></ul> | [Laboratório](cap05_lab_validacao_cruzada_bootstrap.ipynb) · [Projeto integrado](cap05_06_projeto_precificacao_ames.ipynb) |
 | **6 — Seleção e regularização** | <ul><li>Seleção de subconjuntos</li><li>Ridge, lasso e elastic net</li><li>PCR e PLS</li><li>Seleção de atributos</li></ul> | [Laboratório](cap06_lab_selecao_regularizacao.ipynb) · [Lab comentado](cap06_lab_selecao_regularizacao_comentado.ipynb) · [Experimento](cap06_experimento_selecao_atributos_ames.ipynb) · [Projeto integrado](cap05_06_projeto_precificacao_ames.ipynb) |
+| **7 — Modelagem não linear** | <ul><li>Regressão polinomial e funções degrau</li><li>Splines de regressão e de suavização</li><li>Modelos aditivos generalizados</li><li>Regressão local</li></ul> | [Laboratório](cap07_lab_modelagem_nao_linear.ipynb) · [Projeto](cap07_projeto_probabilidade_inadimplencia_cartao.ipynb) |
+| **8 — Métodos baseados em árvores** | <ul><li>Árvores de regressão e classificação</li><li>Poda por complexidade de custo</li><li>Bagging, random forest e boosting</li><li>BART, interpretação e estabilidade</li></ul> | [Laboratório](cap08_lab_metodos_baseados_arvores.ipynb) · [Projeto Bank Marketing](cap08_projeto_priorizacao_clientes_bank_marketing.ipynb) · [Projeto German Credit](cap08_projeto_risco_credito_german.ipynb) |
 
 Os arquivos CSV e demais conjuntos usados pelos laboratórios estão preservados em [`lab_chapters/`](lab_chapters/).
 
@@ -135,11 +150,63 @@ Projeto mais abrangente do repositório. Conecta formulação do problema, audit
 O pipeline treinado e seus metadados estão em [`artifacts/ames_linear_model.joblib`](artifacts/ames_linear_model.joblib) e [`artifacts/ames_linear_model_metadata.json`](artifacts/ames_linear_model_metadata.json).
 
 ---
+### Probabilidade de inadimplência em cartões
+
+**Notebook:** [Abrir projeto](cap07_projeto_probabilidade_inadimplencia_cartao.ipynb)
+
+Projeto end-to-end de risco de crédito com o conjunto *Default of Credit Card Clients*, da UCI. O estudo conecta a modelagem não linear do Capítulo 7 à construção e ao uso responsável de probabilidades de inadimplência:
+
+- formulação probabilística do problema e definição do contrato dos dados;
+- engenharia de atributos dentro do pipeline;
+- regressão local como ferramenta exploratória;
+- comparação entre formas lineares, polinomiais, discretizadas e splines;
+- validação cruzada aninhada e métricas probabilísticas;
+- calibração e escolha de limiar orientada por custo;
+- análise de falhas, auditoria por grupos e importância por permutação;
+- persistência do modelo e monitoramento por PSI.
+
+O artefato do projeto está em [`artifacts/modelo_pd_gam.pkl`](artifacts/modelo_pd_gam.pkl).
+
+---
+### Priorização de clientes em campanha bancária
+
+**Notebook:** [Abrir projeto](cap08_projeto_priorizacao_clientes_bank_marketing.ipynb)
+
+Projeto de classificação temporal com o conjunto Bank Marketing, da UCI. O objetivo didático é transformar probabilidades de adesão em uma política de priorização compatível com a capacidade de contato:
+
+- formulação da decisão e auditoria de vazamento de informação;
+- separação temporal entre desenvolvimento e teste futuro;
+- engenharia de atributos em pipelines reproduzíveis;
+- árvores rasas e poda por complexidade de custo;
+- comparação entre bagging, random forest e boosting;
+- validação temporal, estimativa out-of-bag e calibração;
+- política de capacidade, interpretação e análise de erros;
+- drift, persistência e testes do contrato de inferência.
+
+---
+### Risco de crédito com German Credit
+
+**Notebook:** [Abrir projeto](cap08_projeto_risco_credito_german.ipynb)
+
+Projeto end-to-end com o conjunto Statlog German Credit, da UCI. O fluxo relaciona árvores e ensembles a custo de decisão, estabilidade e governança:
+
+- definição assimétrica do custo dos erros;
+- decodificação e engenharia dos atributos do conjunto;
+- árvore rasa, poda e estabilidade das regras;
+- comparação com baseline logístico e métodos de ensemble;
+- validação cruzada repetida e escolha de limiar fora dos folds;
+- interpretação, análise dos erros de maior custo e auditoria por grupos;
+- testes de estresse de dados e monitoramento;
+- persistência do pipeline e validação do artefato.
+
+O artefato do projeto está em [`artifacts/pipeline_risco_credito_german.pkl`](artifacts/pipeline_risco_credito_german.pkl).
+
+---
 ## Estrutura atual
 
 ```text
 ISLP/
-├── artifacts/                  # modelo Ames persistido e metadados
+├── artifacts/                  # modelos, pipelines e metadados persistidos
 ├── data/                       # cópia local do Ames Housing obtida pelo OpenML
 ├── lab_chapters/               # datasets usados nos laboratórios do ISLP
 ├── capNN_lab_*.ipynb           # laboratórios por capítulo
@@ -177,7 +244,7 @@ Onde:
 
 ## Ambiente
 
-Os metadados dos notebooks registram Python `3.14.3`, e o artefato Ames registra scikit-learn `1.8.0`. As dependências diretas estão fixadas em [`requirements.txt`](requirements.txt) para tornar o ambiente reproduzível.
+Os notebooks mais recentes registram Python `3.14.3` e scikit-learn `1.8.0`. As dependências diretas estão fixadas em [`requirements.txt`](requirements.txt) para tornar o ambiente reproduzível.
 
 Criação de ambiente virtual no Windows:
 
@@ -227,8 +294,10 @@ O arquivo de requisitos contém apenas dependências externas importadas pelos n
 
 - [`lab_chapters/`](lab_chapters/) contém datasets usados nos laboratórios do livro.
 - [`data/ames_openml_42165.csv`](data/ames_openml_42165.csv) é a cópia local do conjunto Ames Housing obtido pelo OpenML, ID `42165`.
-- [`resumo_sweetviz.html`](resumo_sweetviz.html) contém uma exploração automatizada do conjunto Ames.
-- [`artifacts/`](artifacts/) contém o pipeline treinado e o contrato de metadados do projeto Ames.
+- [`artifacts/ames_linear_model.joblib`](artifacts/ames_linear_model.joblib) e [`artifacts/ames_linear_model_metadata.json`](artifacts/ames_linear_model_metadata.json) pertencem ao projeto Ames Housing.
+- [`artifacts/modelo_pd_gam.pkl`](artifacts/modelo_pd_gam.pkl) pertence ao projeto de probabilidade de inadimplência em cartões.
+- [`artifacts/pipeline_risco_credito_german.pkl`](artifacts/pipeline_risco_credito_german.pkl) pertence ao projeto German Credit.
+- O projeto Bank Marketing incorpora os dados no notebook e cria seu artefato em `artifacts/` quando executado.
 
 Arquivos de dados e modelos podem ser grandes. Antes de compartilhar o projeto publicamente, é importante verificar licença, origem, tamanho e necessidade de versionamento de cada artefato.
 
@@ -245,7 +314,7 @@ Arquivos de dados e modelos podem ser grandes. Antes de compartilhar o projeto p
 
 ## Repositório em construção
 
-Este material ainda está em construção. O ISLP está sendo estudado capítulo a capítulo, enquanto os laboratórios, experimentos e projetos são elaborados e revisados ao longo desse processo.
+Este material ainda está em construção. Os capítulos 3 a 8 do ISLP estão sendo estudados e revisados, enquanto novos laboratórios, experimentos e projetos são elaborados ao longo desse processo.
 
 A continuidade do estudo inclui *Feature Engineering and Selection* e *Applied Machine Learning for Tabular Data*. Os conceitos e exercícios desses livros serão incorporados quando houver material prático consolidado para conectá-los à trilha atual.
 
@@ -259,7 +328,9 @@ A continuidade do estudo inclui *Feature Engineering and Selection* e *Applied M
 | scikit-learn | 1.8.0 | Pipelines, modelos, métricas e validação cruzada |
 | Matplotlib | 3.11.1 | Visualizações base |
 | seaborn | 0.13.2 | Visualizações estatísticas |
+| SciPy | 1.18.1 | Funções científicas e transformações de probabilidade |
 | statsmodels | 0.14.6 | Inferência e modelos estatísticos |
+| pyGAM | 0.12.0 | Modelos aditivos generalizados e splines suavizadas |
 | ISLP | 0.4.1 | Datasets, modelos e utilitários dos laboratórios |
 | l0bnb | 1.0.0 | Seleção de subconjuntos |
 | optbinning | 0.21.0 | Discretização e seleção exploratória |
